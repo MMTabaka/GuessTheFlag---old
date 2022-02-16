@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
+    @State private var score = 0
+    @State private var pickedFlag = ""
     
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     
@@ -44,11 +46,10 @@ struct ContentView: View {
                                 .renderingMode(.original)
                                 .clipShape(Capsule())
                                 .shadow(radius: 5)
-                            
                         }
                     }
                     
-                    Text("Score: ???")
+                    Text("Score: \(score)")
                         .foregroundColor(Color.white)
                         .font(.title2.weight(.semibold))
                 }
@@ -58,15 +59,19 @@ struct ContentView: View {
         .alert(scoreTitle, isPresented: $showingScore) {
             Button("Continue", action: askQuastion)
         } message: {
-            Text("Your score is ???")
+            Text("That's the flag of \(pickedFlag)")
         }
     }
     
     func flagTapped(_ number: Int) {
+        pickedFlag = countries[number]
+        
         if number == correctAnswer {
             scoreTitle = "Correct"
+            score += 1
         } else {
             scoreTitle = "Wrong"
+            score = 0
         }
         
         showingScore = true
