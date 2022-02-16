@@ -17,31 +17,42 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [.blue, .black]), startPoint: .top, endPoint: .bottom)
+            Color(red: 0, green: 0, blue: 0.3)
                 .ignoresSafeArea()
             
-            VStack(spacing: 30) {
-                VStack {
-                    Text("Tap the flag of")
-                        .foregroundColor(Color.white)
-                        .font(.subheadline.weight(.heavy))
-                    
-                    Text(countries[correctAnswer])
-                        .foregroundColor(Color.white)
-                        .font(.largeTitle.weight(.semibold))
-                }
+            VStack{
+                Text("Guess the Flag")
+                    .font(.largeTitle.bold())
+                    .foregroundColor(Color.white)
                 
-                ForEach(0..<3) { number in
-                    Button {
-                        flagTapped(number)
-                    } label: {
-                        Image(countries[number].lowercased())
-                            .renderingMode(.original)
-                            .clipShape(Capsule())
-                            .shadow(radius: 5)
+                VStack(spacing: 25) {
+                    VStack {
+                        Text("Tap the flag of")
+                            .foregroundColor(Color.white)
+                            .font(.subheadline.weight(.heavy))
                         
+                        Text(countries[correctAnswer])
+                            .foregroundColor(Color.white)
+                            .font(.largeTitle.weight(.semibold))
                     }
+                    
+                    ForEach(0..<3) { number in
+                        Button {
+                            flagTapped(number)
+                        } label: {
+                            Image(countries[number].lowercased())
+                                .renderingMode(.original)
+                                .clipShape(Capsule())
+                                .shadow(radius: 5)
+                            
+                        }
+                    }
+                    
+                    Text("Score: ???")
+                        .foregroundColor(Color.white)
+                        .font(.title2.weight(.semibold))
                 }
+                .padding(20)
             }
         }
         .alert(scoreTitle, isPresented: $showingScore) {
