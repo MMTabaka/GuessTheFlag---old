@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var showingScore = false
+    @State private var showingAnswer = false
+    @State private var gameFinished = false
     @State private var scoreTitle = ""
     @State private var score = 0
     @State private var pickedFlag = ""
+    @State private var numOfGames = 0
     
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     
@@ -56,32 +58,50 @@ struct ContentView: View {
                 .padding(20)
             }
         }
-        .alert(scoreTitle, isPresented: $showingScore) {
+        .alert(scoreTitle, isPresented: $showingAnswer) {
             Button("Continue", action: askQuastion)
         } message: {
             Text("That's the flag of \(pickedFlag)")
+        }
+        
+        .alert("Game Finished", isPresented: $gameFinished) {
+            Button("Restart game", action: restartGame)
+        } message: {
+            Text("Your score is \(score)/8")
         }
     }
     
     func flagTapped(_ number: Int) {
         pickedFlag = countries[number]
+        numOfGames += 1
         
         if number == correctAnswer {
             scoreTitle = "Correct"
             score += 1
         } else {
             scoreTitle = "Wrong"
-            score = 0
         }
         
-        showingScore = true
+        showingAnswer = true
     }
+    
     
     func askQuastion() {
-        countries = countries.shuffled()
-        correctAnswer = Int.random(in: 0...2)
+        if numOfGames == 8 {
+            gameFinished = true
+        } else {
+            
+            countries = countries.shuffled()
+            correctAnswer = Int.random(in: 0...2)
+        }
     }
     
+    func restartGame() {
+        score = 0
+        numOfGames = 0
+        
+        askQuastion()
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
